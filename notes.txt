@@ -1,0 +1,28 @@
+*******************when use cjson************
+If you forget to use  cJSON_Delete(), the memory will be in danger.
+Example:
+cJSON *json, *json_height, *json_width,*json_frametime,*json_channel,*json_data,*json_intrix,*json_extra;
+    json = cJSON_Parse(input_json);
+    json_height = cJSON_GetObjectItem(json, "height");
+    json_width = cJSON_GetObjectItem(json, "width");
+    json_channel = cJSON_GetObjectItem(json, "channel");
+    json_extra = cJSON_GetObjectItem(json, "extra");
+    json_intrix = cJSON_GetObjectItem(json, "innerParams");
+    json_frametime = cJSON_GetObjectItem(json, "frametime");
+    json_data =cJSON_GetObjectItem(json,"data");
+cJSON_Delete(json)
+W: the value which is acted on cJSON_Parse() is the 'root'.You'd better use cJSON_Delete(root) to release memory recursively. If you use free() for each pointer or do nothing, memory leak will rise.
+
+******************use pthread**************
+pthread_t a ;
+pthread_attr_t pProprety;
+pthread_attr_init(&pProprety);
+pthread_attr_setdetachstate(&pProprety,PTHREAD_CREATE_DETACHED);
+pthread_create(&a,&pProprety,cptRT,p);
+
+1.You must make a struct to give parameters.
+2.PTHREAD_CREATE_DETACHED will help you release resource when a thread exited.
+******************some skills**************
+1.use free -h to check memory leaks.
+2.use "ulimited -c unlimited" to create a core file.
+3.gdb ./(excuting file) core to debuge.(You must use g++ -g) or add_definitions("-Wall -g") in cmake 
